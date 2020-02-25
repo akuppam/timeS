@@ -2,27 +2,16 @@
 # 3
 # Generate plots
 # #####################################
-# ########################
-#This script uses parallel processing if p.flag=TRUE.  Set up a parallel 
-#cluster as appropriate for your machine as appropriate. (the commented code 
-#below will use 2 cores on a multicore computer)
-library(doParallel)
-cl <- makeCluster(8)  # Use 2 cores
-registerDoParallel(cl) # register these 2 cores with the "foreach" package
-library(plyr)
-p.flag=TRUE  # Change to TRUE if using parallel processing
-# ########################
 
 # Plot forecasts from different methods
 df_rnb <- c(rnb, rep(NA,h))
 df1 <- c(rnb, st_ets)
 df6 <- c(fit_arima_fc$fitted, fit_arima_fc$mean) # Using 'forecast()' function: mean = forecasts (n=120); fitted = backcasts (n=998)
-df7 <- c(fit_sarima_fc$fitted, fit_sarima_fc$mean)
 df11 <- c(fit_hw_fc$fitted, fit_hw_fc$mean)
 
 dfreal <- c(DF$y, rep(NA,h))
-df_all <- data.frame(dfreal,dfprophet,dfprophet_visits,dfprophet_visits_hw,df6,df11,df7)
-names(df_all) <- c("real","prophet","prophet_visits","prophet_visits_hw","arima","hw","sarima")
+df_all <- data.frame(dfreal,dfprophet,dfprophet_visits,dfprophet_visits_hw,df6,df11)
+names(df_all) <- c("real","prophet","prophet_visits","prophet_visits_hw","arima","hw")
 write.csv(df_all, "df_all_agg.csv")
 
 # adding date as index

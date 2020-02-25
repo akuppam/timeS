@@ -1,5 +1,4 @@
 # ########################
-# 2
 # Prophet Model w/
 # - regressors
 # - holidays
@@ -17,20 +16,11 @@ library(dplyr)
 library(ggplot2)
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
-# load dataset
-#library(dplyr)
-#setwd("/users/akuppam/documents/Hprog/R/Prophet/")
-#DFagg <- read.csv("rnb1015.csv")
-#DFagg <- mutate(DFagg, ds = as.Date(date))
 
-#setwd("/users/akuppam/documents/Hprog/R/Prophet/AMR_paid/")
-#region = 'AMR'
-#DF = DFagg[(which((DFagg[,'region'] == 'AMR') & (DFagg[,'marketing'] == 'Paid'))),]
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
 # horizon
-# h = 730  # 2 year forecast (2018/10/16 - 2020/10/14)
-h = 442 # 1+ year forecast (2018/10/16 - 2019/12/31)
+h = 730
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
 # adding holidays
@@ -186,14 +176,13 @@ if (region == 'AMR') {
 } else {
   holidays <- SoEuholidays
 }
+
 # -----------------------
 model = prophet(holidays = holidays, 
                 yearly.seasonality = yearly.seasonality, 
                 weekly.seasonality = weekly.seasonality,
                 daily.seasonality = daily.seasonality,
-                seasonality.prior.scale = 20,
-                seasonality.mode = "multiplicative")
-#                changepoint.prior.scale = 0.001)
+                seasonality.prior.scale = 20)
 
 #model = add_seasonality(model, name = 'monthly', period = 30.5, fourier.order = 5)
 #model = add_seasonality(model, name = 'weekly', period = 7, fourier.order = 3, prior.scale = 0.1)
@@ -230,15 +219,30 @@ fdat <-  data.frame(ds=pfdat$ds, visits=pvisits$yhat, br=pbr$yhat, listings=plis
 fit <- model %>% fit.prophet(pdat)
 
 forecast <- predict(fit, fdat)
-write.csv(forecast, "forecast_prophet.csv")
 fpred <- predict(fit)
-write.csv(fpred, "fpred_prophet.csv")
 fpred$ds <- as.Date(fpred$ds)
 fpred <- pdat %>% left_join(fpred,by="ds")
 fpred$resid <- fpred$y - fpred$yhat
 
 dfprophet <- c(fpred$yhat, forecast$yhat)
 mape_prophet <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
+
+#R
+forecast %>%
+  dplyr::select(ds, easterSunday, memorialMonday, laborMonday, thxgiving) %>%
+  filter(abs(easterSunday + memorialMonday + laborMonday + thxgiving) > 0) %>%
+  tail(10)
+
+prophet_plot_components(fit, forecast)
+
+forecast %>%
+  dplyr::select(ds, easterSunday) %>%
+  filter(abs(easterSunday) > 0) %>%
+  tail(10)
+
+prophet_plot_components(fit, forecast)
+prophet:::plot_yearly(fit)
+
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
 fit <- model %>% 
@@ -246,61 +250,69 @@ fit <- model %>%
   fit.prophet(pdat)
 
 forecast <- predict(fit, fdat)
-write.csv(forecast, "forecast_prophet_visits.csv")
 fpred <- predict(fit)
-write.csv(fpred, "fpred_prophet_visits.csv")
 fpred$ds <- as.Date(fpred$ds)
 fpred <- pdat %>% left_join(fpred,by="ds")
 fpred$resid <- fpred$y - fpred$yhat
 
 dfprophet_visits <- c(fpred$yhat, forecast$yhat)
 mape_prophet_visits <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
-# -------------------------------------------------------------------------
-# -------------------------------------------------------------------------
+# -------------------
+# -------------------
 fit <- model %>% 
-  add_regressor('visits') %>% 
+  add_regressor('br') %>% 
   fit.prophet(pdat)
-# -----------
-# HoltWinters for pvisits
-library(forecast)
-# Make the 'y' variables to a ts object
-ts_visits <- ts(DF$visits, start=2016,freq=365)
-str(ts_visits)
-visitsAlphaBetaGamma <- HoltWinters(ts_visits)
-fit_hw_fc_visits <- forecast(visitsAlphaBetaGamma, h=h)
-write.csv(fit_hw_fc_visits, "fit_hw_visits.csv")
-# -----------
-fdat <-  data.frame(ds=pfdat$ds, visits=fit_hw_fc_visits$mean)
-# -----------
+
 forecast <- predict(fit, fdat)
-write.csv(forecast, "forecast_prophet_visits_hw.csv")
 fpred <- predict(fit)
-write.csv(fpred, "fpred_prophet_visits_hw.csv")
 fpred$ds <- as.Date(fpred$ds)
 fpred <- pdat %>% left_join(fpred,by="ds")
 fpred$resid <- fpred$y - fpred$yhat
 
-dfprophet_visits_hw <- c(fpred$yhat, forecast$yhat)
-# mape will be SAME as previous prophet model
-# -----------
-# components analysis
-dates <- seq(as.Date("2016-01-01"), as.Date("2019-12-31"), by="days")
-trend <- c(fpred$trend, forecast$trend)
-hols <- c(fpred$holidays, forecast$holidays)
-reg <- c(fpred$extra_regressors_multiplicative, forecast$extra_regressors_multiplicative)
-wkly <- c(fpred$weekly, forecast$weekly)
-yrly <- c(fpred$yearly, forecast$yearly)
-yhat <- c(fpred$yhat, forecast$yhat)
-# ----------------------------------------------------
-# ----------------------------------------------------
+dfprophet_br <- c(fpred$yhat, forecast$yhat)
+mape_prophet_br <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
+# -------------------
+# -------------------
+fit <- model %>% 
+  add_regressor('visits') %>% 
+  add_regressor('br') %>% 
+  fit.prophet(pdat)
 
-# ----------------------------------------------------
-# ----------------------------------------------------
+forecast <- predict(fit, fdat)
+fpred <- predict(fit)
+
+dfprophet_vibr <- c(fpred$yhat, forecast$yhat)
+mape_prophet_vibr <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
 # -------------------
 # -------------------
+fit <- model %>% 
+  add_regressor('visits') %>% 
+  add_regressor('br') %>% 
+  add_regressor('listings') %>% 
+  fit.prophet(pdat)
+
+forecast <- predict(fit, fdat)
+fpred <- predict(fit)
+
+dfprophet_vibrli <- c(fpred$yhat, forecast$yhat)
+mape_prophet_vibrli <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
+
+# -------------------
+fit <- model %>% 
+  add_regressor('br') %>% 
+  add_regressor('listings') %>% 
+  fit.prophet(pdat)
+
+forecast <- predict(fit, fdat)
+fpred <- predict(fit)
+
+dfprophet_brli <- c(fpred$yhat, forecast$yhat)
+mape_prophet_brli <- mean(abs((pdat$y - fpred$yhat)/pdat$y))
+# ----------------------------------------------------
+# ----------------------------------------------------
 # SES, ARIMA, HW
-# -------------------
-# -------------------
+# ----------------------------------------------------
+# ----------------------------------------------------
 library(forecast)
 library(ggplot2)
 library(dplyr)
@@ -342,14 +354,13 @@ mape_hw
 # Output MAPES by Model
 library(dplyr)
 mapes_by_model_Hols <- data_frame(
-  ts_model = c('prophet','prophet_visits',
+  ts_model = c('prophet','prophet_br','prophet_brli','prophet_vibr',
+               'prophet_vibrli','prophet_visits',
                'hw','arima'),
-  mape = c(mape_prophet,mape_prophet_visits,
+  mape = c(mape_prophet,mape_prophet_br,mape_prophet_brli,mape_prophet_vibr,
+           mape_prophet_vibrli,mape_prophet_visits,
            mape_hw,mape_arima) 
 )
-#write.csv(mapes_by_model_Hols, "MAPE_by_model.csv")
-prefix <- paste(DF$region[1], DF$marketing[1], sep = "_")
-write.csv(mapes_by_model_Hols, file = paste0(prefix, "_MAPE_by_model.csv"))
-
+write.csv(mapes_by_model_Hols, "MAPE_by_model.csv")
 # -------------------------------------------
 # -------------------------------------------

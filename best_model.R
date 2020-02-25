@@ -2,7 +2,7 @@
 # 5
 # pick the best model (forecasts) for each region and marketing channel
 # ######################################################################
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/AMR_nonpaid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/AMR_nonpaid/")
 df100 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[1] == 'prophet') {
   df100_f <- df100$prophet
@@ -10,13 +10,11 @@ if(df_min_mapes$Model[1] == 'prophet') {
   df100_f <- df100$prophet_visits
 } else if(df_min_mapes$Model[1] == 'arima') {
   df100_f <- df100$arima
-} else if(df_min_mapes$Model[1] == 'sarima') {
-  df100_f <- df100$sarima
 } else {
   df100_f <- df100$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/AMR_paid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/AMR_paid/")
 df200 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[2] == 'prophet') {
   df200_f <- df200$prophet
@@ -24,13 +22,11 @@ if(df_min_mapes$Model[2] == 'prophet') {
   df200_f <- df200$prophet_visits
 } else if(df_min_mapes$Model[2] == 'arima') {
   df200_f <- df200$arima
-} else if(df_min_mapes$Model[2] == 'sarima') {
-  df200_f <- df200$sarima
 } else {
   df200_f <- df200$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/CE_nonpaid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/CE_nonpaid/")
 df300 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[3] == 'prophet') {
   df300_f <- df300$prophet
@@ -38,13 +34,11 @@ if(df_min_mapes$Model[3] == 'prophet') {
   df300_f <- df300$prophet_visits
 } else if(df_min_mapes$Model[3] == 'arima') {
   df300_f <- df300$arima
-} else if(df_min_mapes$Model[3] == 'sarima') {
-  df300_f <- df300$sarima
 } else {
   df300_f <- df300$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/CE_paid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/CE_paid/")
 df400 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[4] == 'prophet') {
   df400_f <- df400$prophet
@@ -52,13 +46,11 @@ if(df_min_mapes$Model[4] == 'prophet') {
   df400_f <- df400$prophet_visits
 } else if(df_min_mapes$Model[4] == 'arima') {
   df400_f <- df400$arima
-} else if(df_min_mapes$Model[4] == 'sarima') {
-  df400_f <- df400$sarima
 } else {
   df400_f <- df400$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/FR_nonpaid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/FR_nonpaid/")
 df500 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[5] == 'prophet') {
   df500_f <- df500$prophet
@@ -66,13 +58,11 @@ if(df_min_mapes$Model[5] == 'prophet') {
   df500_f <- df500$prophet_visits
 } else if(df_min_mapes$Model[5] == 'arima') {
   df500_f <- df500$arima
-} else if(df_min_mapes$Model[5] == 'sarima') {
-  df500_f <- df500$sarima
 } else {
   df500_f <- df500$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/FR_paid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/FR_paid/")
 df600 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[6] == 'prophet') {
   df600_f <- df600$prophet
@@ -80,13 +70,11 @@ if(df_min_mapes$Model[6] == 'prophet') {
   df600_f <- df600$prophet_visits
 } else if(df_min_mapes$Model[6] == 'arima') {
   df600_f <- df600$arima
-} else if(df_min_mapes$Model[6] == 'sarima') {
-  df600_f <- df600$sarima
 } else {
   df600_f <- df600$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/SoEu_nonpaid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/SoEu_nonpaid/")
 df700 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[7] == 'prophet') {
   df700_f <- df700$prophet
@@ -94,13 +82,11 @@ if(df_min_mapes$Model[7] == 'prophet') {
   df700_f <- df700$prophet_visits
 } else if(df_min_mapes$Model[7] == 'arima') {
   df700_f <- df700$arima
-} else if(df_min_mapes$Model[7] == 'sarima') {
-  df700_f <- df700$sarima
 } else {
   df700_f <- df700$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/SoEu_paid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/SoEu_paid/")
 df800 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[8] == 'prophet') {
   df800_f <- df800$prophet
@@ -108,13 +94,11 @@ if(df_min_mapes$Model[8] == 'prophet') {
   df800_f <- df800$prophet_visits
 } else if(df_min_mapes$Model[8] == 'arima') {
   df800_f <- df800$arima
-} else if(df_min_mapes$Model[8] == 'sarima') {
-  df800_f <- df800$sarima
 } else {
   df800_f <- df800$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/UK_nonpaid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/UK_nonpaid/")
 df900 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[9] == 'prophet') {
   df900_f <- df900$prophet
@@ -122,13 +106,11 @@ if(df_min_mapes$Model[9] == 'prophet') {
   df900_f <- df900$prophet_visits
 } else if(df_min_mapes$Model[9] == 'arima') {
   df900_f <- df900$arima
-} else if(df_min_mapes$Model[9] == 'sarima') {
-  df900_f <- df900$sarima
 } else {
   df900_f <- df900$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/UK_paid/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/UK_paid/")
 df1000 <- read.csv("df_all_agg.csv")
 if(df_min_mapes$Model[10] == 'prophet') {
   df1000_f <- df1000$prophet
@@ -136,13 +118,11 @@ if(df_min_mapes$Model[10] == 'prophet') {
   df1000_f <- df1000$prophet_visits
 } else if(df_min_mapes$Model[10] == 'arima') {
   df1000_f <- df1000$arima
-} else if(df_min_mapes$Model[10] == 'sarima') {
-  df1000_f <- df1000$sarima
 } else {
   df1000_f <- df1000$hw
 }
 # -------------------------------------------------------------------------
-setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/")
+setwd("/users/akuppam/documents/Hprog/R/Prophet/Test9/")
 df_best_forecasts <- data.frame(df100_f,df200_f,df300_f,df400_f,df500_f,
                                 df600_f,df700_f,df800_f,df900_f,df1000_f)
 names(df_best_forecasts) <- c("AMR_nonpaid","AMR_paid","CE_nonpaid","CE_paid","FR_nonpaid",

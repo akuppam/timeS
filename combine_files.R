@@ -3,7 +3,6 @@
 # combine csv files that have MAPEs
 # create a column with region/marketing
 # ######################################
-path = "/users/akuppam/documents/Hprog/R/Prophet/Test9v3speed/"
 setwd(path)
 library(dplyr)
 # create a list of the filenames with the full path
