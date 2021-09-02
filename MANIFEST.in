@@ -1,0 +1,3 @@
+include versioneer.py
+include time_series_multireg/_version.py
+include model_bootstrap.sh

@@ -1,0 +1,15 @@
+name: time-series-multireg
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - pip
+  - pip:
+    - pytest
+    - pytest-cov
+    - pytest-profiling
+    - flake8
+    - ipython
+    - click
+    - black
